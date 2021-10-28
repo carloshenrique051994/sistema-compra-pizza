@@ -1,5 +1,6 @@
 let cart = [];
 let modalQt = 1;
+let modalKey = 0;
 
 const c = (el) => document.querySelector(el);
 const cs = (el) => document.querySelectorAll(el);
@@ -71,5 +72,30 @@ cs('.pizzaInfo--size').forEach((size, sizeIndex) => {
     });
 });
 c('.pizzaInfo--addButton').addEventListener('click', () => {
-    cart.
+    let size = Number(c('.pizzaInfo--size.selected').getAttribute('data-key'));
+    let identifier = pizzaJson[modalKey].id + '@' + size;
+    let key = cart.findIndex((item) => item.identifier == identifier);
+    if (key > -1) {
+        cart[key].qt += modalQt;
+    } else {
+        cart.push({
+            identifier,
+            id: pizzaJson[modalKey].id,
+            size,
+            qt: modalQt
+        });
+    }
+    updateCart();
+    closeModal();
 });
+
+function updateCart(){
+    if(cart.length > 0) {
+        c('aside').classList.add('show');
+        for(let i in cart){
+            let pizzaItem = pizzaJson.find((item)=>item.id == cart[i].id);
+        }
+    }else{
+        c('aside').classList.remove('show');
+    }
+}
